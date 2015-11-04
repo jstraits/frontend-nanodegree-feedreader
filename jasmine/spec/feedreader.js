@@ -1,3 +1,4 @@
+'use strict';
 /* feedreader.js
  *
  * This is the spec file that Jasmine will read and contains
@@ -30,7 +31,7 @@ $(function() {
          * ensures the allFeeds object it has a URL defined
          * and that the URL is not empty.
          */
-		it('has a defined URL', function() {
+		it('has a defined URL and not empty', function() {
 			for (var i = 0; i < allFeeds.length; i++) {
                 expect(allFeeds[i].url).toBeDefined();
                 expect(allFeeds[i].url.length).not.toBe(0);
@@ -40,7 +41,7 @@ $(function() {
 		 * and ensures it has a name defined
          * and that the name is not empty.
          */
-		it('has a defined name', function() {
+		it('has a defined name and not empty', function() {
 			for (var i = 0; i < allFeeds.length; i++) {
                 expect(allFeeds[i].name).toBeDefined();
                 expect(allFeeds[i].name.length).not.toBe(0);
@@ -52,12 +53,12 @@ $(function() {
 	describe('The menu', function() {
 	
         /* ensures the menu element is hidden by default.*/
-		it('should have class "menu-hidden"', function() {
+		it('should have class "menu-hidden" on page load', function() {
 			expect($('body').hasClass('menu-hidden')).toBe(true);
-		});
+		}); 
 		
          /* ensures the menu changes visibility when the menu icon is clicked*/
-		it('should change on click', function() {
+		it('should change when clicked on page load', function() {
 			$('.menu-icon-link').trigger('click');
 			expect($('body').hasClass('menu-hidden')).not.toBe(true);
 			$('.menu-icon-link').trigger('click');
@@ -87,19 +88,18 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          */
 		
-		var headerOriginal;
-		var headerUpdate;
+		var headerOriginal, headerUpdate;
+		
 		beforeEach(function(done){
 			$('.feed').empty();
 
+	//combined the loadFeed into one function so done is called only once
 			loadFeed(0, function() {
-				headerOriginal = $('.feed').find('.entry').text();
-				done();
-			});
-
-			loadFeed(1, function() {
-				headerUpdate = $('.feed').find('.entry').text();
-				done();
+				headerOriginal = $('.feed').text();
+				loadFeed(1, function() {
+					headerUpdate = $('.feed').text();
+					done();
+				});	
 			});
 		});
 	    it('changes the content', function(){
